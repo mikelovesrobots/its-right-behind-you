@@ -21,5 +21,6 @@ app.config = {
   PLAYER_LEFT = 4,
   PLAYER_RIGHT = 4,
   PLAYER_TOP = 16,
-  PLAYER_BOTTOM = 16
+  PLAYER_BOTTOM = 16,
+  BREAK_LIMIT = 0.25
 }

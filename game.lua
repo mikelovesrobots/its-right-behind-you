@@ -47,6 +47,11 @@ function Game:enterState()
   self.map_y = 0
   self.map_display_buffer = 2 -- We have to buffer one tile before and behind our viewpoint.
                                -- Otherwise, the tiles will just pop into view, and we don't want that.
+
+  -- breaking bricks
+  self.break_x = 0
+  self.break_y = 0
+  self.break_dt = 0
 end
 
 function Game:draw()
@@ -136,6 +141,12 @@ function Game:draw_map()
 
   for y=1, (app.config.MAP_DISPLAY_HEIGHT + self.map_display_buffer) do
     for x=1, (app.config.MAP_DISPLAY_WIDTH + self.map_display_buffer) do
+      if x == self.break_x and y == self.break_y then
+        love.graphics.setColor(self:break_color(), self:break_color(), self:break_color())
+      else
+        love.graphics.setColor(255,255,255)
+      end
+
       -- Note that this condition block allows us to go beyond the edge of the map.
       if y + first_tile_y >= 1 and y + first_tile_y <= self.map_height
         and x + first_tile_x >= 1 and x + first_tile_x <= self.map_width
@@ -233,13 +244,56 @@ function Game:clip_bottom(y)
 end
 
 function Game:bump_left(dt)
-  self.map[self:tile_y(self.y)][self:tile_x(self.x) - 1] = 0
+  local x = self:tile_x(self.x) - 1
+  local y = self:tile_y(self.y)
+
+  if self:break_brick(x, y, dt) then
+    self.map[y][x] = 0
+  end
 end
 
 function Game:bump_right(dt)
-  self.map[self:tile_y(self.y)][self:tile_x(self.x) + 1] = 0
+  local x = self:tile_x(self.x) + 1
+  local y = self:tile_y(self.y)
+
+  if self:break_brick(x, y, dt) then
+    self.map[y][x] = 0
+  end
 end
 
 function Game:bump_down(dt)
-  self.map[self:tile_y(self.y)+1][self:tile_x(self.x)] = 0
+  local x = self:tile_x(self.x)
+  local y = self:tile_y(self.y) + 1
+
+  if self:break_brick(x, y, dt) then
+    self.map[y][x] = 0
+  end
+end
+
+function Game:break_brick(x, y, dt)
+  if self.break_x == x and self.break_y == y then
+    if self.break_dt + dt > app.config.BREAK_LIMIT then
+      return true
+    else
+      self.break_dt = self.break_dt + dt
+      return false
+    end
+  else
+    self:reset_break(x, y, dt)
+    return false
+  end
+end
+
+function Game:reset_break(x, y, dt)
+  self.break_x = x
+  self.break_y = y
+  self.break_dt = dt
+end
+
+function Game:break_percentage()
+  return self.break_dt / app.config.BREAK_LIMIT
+end
+
+function Game:break_color()
+  return 255 - (100 * self:break_percentage())
 end
