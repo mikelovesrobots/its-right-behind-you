@@ -55,41 +55,55 @@ function Game:draw()
 end
 
 function Game:update(dt)
-  if love.keyboard.isDown("right") then
-    local new_x = self.x + (app.config.SPEED * dt)
-    if self:tile_at_point(new_x, self.y) == 0 then
-      self.x = new_x
-    end
-  elseif love.keyboard.isDown("left") then
-    local new_x = self.x - (app.config.SPEED * dt)
-    if self:tile_at_point(new_x, self.y) == 0 then
-      self.x = new_x
-    end
+  local desired_x = self.x
+  local desired_y = self.y
+
+  if love.keyboard.isDown("left") then
+    desired_x = desired_x - (app.config.SPEED * dt)
+  elseif love.keyboard.isDown("right") then
+    desired_x = desired_x + (app.config.SPEED * dt)
   end
 
-  if love.keyboard.isDown("down") then
-    -- self.y = self.y + (app.config.SPEED * dt)
-  elseif love.keyboard.isDown("up") then
+  -- gravity
+  if love.keyboard.isDown("up") and self:player_colliding_on_bottom(desired_x, desired_y) then
     self.current_gravity = -app.config.JUMP_SPEED
-
-    local new_y = self.y - (app.config.JUMP_SPEED * dt)
-    if self:tile_at_point(self.x, new_y) == 0 then
-      self.y = new_y
-    end
-  end
-
-  if (self:tile_at_coord(self:bottom_boundary()) == 0) then
-    self.current_gravity = self.current_gravity + (app.config.GRAVITY * dt)
-    local new_y = self.y + (self.current_gravity * dt)
-    if self:tile_at_point(self.x, new_y) == 0 then
-      self.y = self.y + (self.current_gravity * dt)
-    end
-  else
-    self.current_gravity = 0;
-  end
-
-  if love.keyboard.isDown(" ") then
+  elseif self:player_colliding_on_top(desired_x, desired_y) then
+    --headbump
     self.current_gravity = 0
+  else
+    self.current_gravity = self.current_gravity + (app.config.GRAVITY * dt)
+  end
+  desired_y = desired_y + (self.current_gravity * dt)
+
+  desired_x = round(desired_x)
+  desired_y = round(desired_y)
+
+  if desired_x < self.x then
+    if self:player_colliding_on_left(desired_x, desired_y) then
+      self.x = self:clip_left(desired_x)
+    else
+      self.x = desired_x
+    end
+  elseif desired_x > self.x then
+    if self:player_colliding_on_right(desired_x, desired_y) then
+      self.x = self:clip_right(desired_x)
+    else
+      self.x = desired_x
+    end
+  end
+
+  if desired_y < self.y then
+    if self:player_colliding_on_top(desired_x, desired_y) then
+      self.y = self:clip_top(desired_y)
+    else
+      self.y = desired_y
+    end
+  elseif desired_y > self.y then
+    if self:player_colliding_on_bottom(desired_x, desired_y) then
+      self.y = self:clip_bottom(desired_y)
+    else
+      self.y = desired_y
+    end
   end
 
   if love.keyboard.isDown("q") then
@@ -140,50 +154,50 @@ function Game:tile_at_coord(coord)
   return self.map[tile_y][tile_x]
 end
 
-function Game:left_boundary()
-  return {x=self.x - (app.config.TILE_WIDTH / 2), y=self.y}
+function Game:left_boundary(x)
+  return x - app.config.PLAYER_LEFT
 end
 
-function Game:right_boundary()
-  return {x=self.x + (app.config.TILE_WIDTH / 2), y=self.y}
+function Game:right_boundary(x)
+  return x + app.config.PLAYER_RIGHT
 end
 
-function Game:top_boundary()
-  return {x=self.x, y=self.y - (app.config.TILE_WIDTH / 2)}
+function Game:top_boundary(y)
+  return y - app.config.PLAYER_TOP
 end
 
-function Game:bottom_boundary()
-  return {x=self.x, y=self.y + (app.config.TILE_WIDTH / 2)}
+function Game:bottom_boundary(y)
+  return y + app.config.PLAYER_BOTTOM
 end
 
 function Game:player_colliding_on_left(x,y)
-  return self:tile_at_coord(self:left_boundary(x,y)) == 0
-end
-
-function Game:player_colliding_on_top(x,y)
-  return self:tile_at_coord(self:top_boundary(x,y)) == 0
+  return not(self:tile_at_point(self:left_boundary(x), y) == 0)
 end
 
 function Game:player_colliding_on_right(x,y)
-  return self:tile_at_coord(self:right_boundary(x,y)) == 0
+  return not(self:tile_at_point(self:right_boundary(x), y) == 0)
+end
+
+function Game:player_colliding_on_top(x,y)
+  return not(self:tile_at_point(x, self:top_boundary(y)) == 0)
 end
 
 function Game:player_colliding_on_bottom(x,y)
-  return self:tile_at_coord(self:bottom_boundary(x,y)) == 0
+  return not(self:tile_at_point(x, self:bottom_boundary(y)) == 0)
 end
 
 function Game:clip_left(x)
-  return x - (x % app.config.TILE_WIDTH)
+  return x - (self:left_boundary(x) % app.config.TILE_WIDTH) + (app.config.TILE_WIDTH / 2)
 end
 
 function Game:clip_right(x)
-  return x + app.config.TILE_WIDTH - (x % app.config.TILE_WIDTH) - 1
+  return x - (self:right_boundary(x) % app.config.TILE_WIDTH) + (app.config.TILE_WIDTH / 2)
 end
 
 function Game:clip_top(y)
-  return y - (y % app.config.TILE_HEIGHT)
+  return y - (self:top_boundary(y) % app.config.TILE_WIDTH) + (app.config.TILE_WIDTH / 2)
 end
 
 function Game:clip_bottom(y)
-  return y + app.config.TILE_HEIGHT - (y % app.config.TILE_HEIGHT) - 1
+  return y - (self:bottom_boundary(y) % app.config.TILE_WIDTH) + (app.config.TILE_WIDTH / 2)
 end
