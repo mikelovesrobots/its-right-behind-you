@@ -12,6 +12,10 @@ function MainMenuScreen:enterState()
   self:reset_menu()
 end
 
+function MainMenuScreen:continuedState()
+  self:reset_menu()
+end
+
 function MainMenuScreen:draw()
   love.graphics.setFont(app.config.TITLE_FONT);
   set_color(self.current_color)
@@ -65,6 +69,8 @@ function MainMenuScreen:update(dt)
 end
 
 function MainMenuScreen:reset_menu()
+  love.graphics.setBackgroundColor(0,0,0);
+
   debug("resetting the menu")
 
   self.menu = {

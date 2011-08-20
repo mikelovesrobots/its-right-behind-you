@@ -4,9 +4,12 @@ function Game:enterState()
   debug("Game initialized")
 
   love.graphics.setFont(app.config.MENU_FONT);
-  self.x = 50
+  love.graphics.setBackgroundColor(229, 232, 220);
+  self.x = 400
   self.y = 50
-  self.speed = 100
+  self.speed = 200
+  self.gravity = 200
+  self.current_gravity = 0
 end
 
 function Game:start_new_game()
@@ -17,6 +20,9 @@ function Game:draw()
 end
 
 function Game:update(dt)
+  self.current_gravity = self.current_gravity + (self.gravity * dt)
+  self.y = self.y + (self.current_gravity * dt)
+
   if love.keyboard.isDown("right") then
     self.x = self.x + (self.speed * dt)
   elseif love.keyboard.isDown("left") then
