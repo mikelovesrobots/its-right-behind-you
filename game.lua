@@ -58,9 +58,9 @@ function Game:update(dt)
   local desired_x = self.x
   local desired_y = self.y
 
-  if love.keyboard.isDown("left") then
+  if love.keyboard.isDown("left") or love.keyboard.isDown("a") then
     desired_x = desired_x - (app.config.SPEED * dt)
-  elseif love.keyboard.isDown("right") then
+  elseif love.keyboard.isDown("right") or love.keyboard.isDown("d") then
     desired_x = desired_x + (app.config.SPEED * dt)
   end
 
@@ -85,7 +85,7 @@ function Game:update(dt)
 
   -- gravity
   if self:player_colliding_on_bottom(desired_x, desired_y) then
-    if self.current_gravity == 0 and love.keyboard.isDown("up") then
+    if self.current_gravity == 0 and (love.keyboard.isDown(" ") or love.keyboard.isDown("up") or love.keyboard.isDown("w")) then
       self.current_gravity = -app.config.JUMP_SPEED
     else
       self.current_gravity = 0
