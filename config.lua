@@ -13,6 +13,7 @@ app.config = {
            love.graphics.newImage("images/lava.png")},
   GRAVITY = 200,
   SPEED = 200,
+  JUMP_SPEED = 200,
   TILE_WIDTH = 32,
   TILE_HEIGHT = 32,
   MAP_DISPLAY_WIDTH = 25,

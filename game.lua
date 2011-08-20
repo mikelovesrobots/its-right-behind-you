@@ -55,16 +55,6 @@ function Game:draw()
 end
 
 function Game:update(dt)
-  if (self:tile_at_coord(self:bottom_boundary()) == 0) then
-    self.current_gravity = self.current_gravity + (app.config.GRAVITY * dt)
-    local new_y = self.y + (self.current_gravity * dt)
-    if self:tile_at_point(self.x, new_y) == 0 then
-      self.y = self.y + (self.current_gravity * dt)
-    end
-  else
-    self.current_gravity = 0;
-  end
-
   if love.keyboard.isDown("right") then
     local new_x = self.x + (app.config.SPEED * dt)
     if self:tile_at_point(new_x, self.y) == 0 then
@@ -80,10 +70,22 @@ function Game:update(dt)
   if love.keyboard.isDown("down") then
     -- self.y = self.y + (app.config.SPEED * dt)
   elseif love.keyboard.isDown("up") then
-    local new_y = self.y - (app.config.SPEED * dt)
+    self.current_gravity = -app.config.JUMP_SPEED
+
+    local new_y = self.y - (app.config.JUMP_SPEED * dt)
     if self:tile_at_point(self.x, new_y) == 0 then
       self.y = new_y
     end
+  end
+
+  if (self:tile_at_coord(self:bottom_boundary()) == 0) then
+    self.current_gravity = self.current_gravity + (app.config.GRAVITY * dt)
+    local new_y = self.y + (self.current_gravity * dt)
+    if self:tile_at_point(self.x, new_y) == 0 then
+      self.y = self.y + (self.current_gravity * dt)
+    end
+  else
+    self.current_gravity = 0;
   end
 
   if love.keyboard.isDown(" ") then
@@ -152,4 +154,36 @@ end
 
 function Game:bottom_boundary()
   return {x=self.x, y=self.y + (app.config.TILE_WIDTH / 2)}
+end
+
+function Game:player_colliding_on_left(x,y)
+  return self:tile_at_coord(self:left_boundary(x,y)) == 0
+end
+
+function Game:player_colliding_on_top(x,y)
+  return self:tile_at_coord(self:top_boundary(x,y)) == 0
+end
+
+function Game:player_colliding_on_right(x,y)
+  return self:tile_at_coord(self:right_boundary(x,y)) == 0
+end
+
+function Game:player_colliding_on_bottom(x,y)
+  return self:tile_at_coord(self:bottom_boundary(x,y)) == 0
+end
+
+function Game:clip_left(x)
+  return x - (x % app.config.TILE_WIDTH)
+end
+
+function Game:clip_right(x)
+  return x + app.config.TILE_WIDTH - (x % app.config.TILE_WIDTH) - 1
+end
+
+function Game:clip_top(y)
+  return y - (y % app.config.TILE_HEIGHT)
+end
+
+function Game:clip_bottom(y)
+  return y + app.config.TILE_HEIGHT - (y % app.config.TILE_HEIGHT) - 1
 end
