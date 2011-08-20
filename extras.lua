@@ -16,3 +16,7 @@ function set_color(rgb)
   love.graphics.setColor(rgb[1], rgb[2], rgb[3])
 end
 
+function round(num)
+  if num >= 0 then return math.floor(num+.5)
+  else return math.ceil(num-.5) end
+end

@@ -6,5 +6,15 @@ app.config = {
   MENU_REGULAR_COLOR = {200, 200, 200},
   MENU_FONT = love.graphics.newFont("fonts/VeraMono.ttf", 15),
   TITLE_FONT = love.graphics.newFont("fonts/AngelicWar.ttf", 48),
-  PLAYER_IMAGE = love.graphics.newImage("images/player.png")
+  PLAYER_IMAGE = love.graphics.newImage("images/player.png"),
+  TILES = {love.graphics.newImage("images/dirt1.png"),
+           love.graphics.newImage("images/dirt2.png"),
+           love.graphics.newImage("images/dirt3.png"),
+           love.graphics.newImage("images/lava.png")},
+  GRAVITY = 200,
+  SPEED = 200,
+  TILE_WIDTH = 32,
+  TILE_HEIGHT = 32,
+  MAP_DISPLAY_WIDTH = 25,
+  MAP_DISPLAY_HEIGHT = 18
 }
