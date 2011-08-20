@@ -64,20 +64,7 @@ function Game:update(dt)
     desired_x = desired_x + (app.config.SPEED * dt)
   end
 
-  -- gravity
-  if love.keyboard.isDown("up") and self:player_colliding_on_bottom(desired_x, desired_y) then
-    self.current_gravity = -app.config.JUMP_SPEED
-  elseif self:player_colliding_on_top(desired_x, desired_y) then
-    --headbump
-    self.current_gravity = 0
-  else
-    self.current_gravity = self.current_gravity + (app.config.GRAVITY * dt)
-  end
-  desired_y = desired_y + (self.current_gravity * dt)
-
   desired_x = round(desired_x)
-  desired_y = round(desired_y)
-
   if desired_x < self.x then
     if self:player_colliding_on_left(desired_x, desired_y) then
       self.x = self:clip_left(desired_x)
@@ -91,6 +78,25 @@ function Game:update(dt)
       self.x = desired_x
     end
   end
+
+  --
+  -- y
+  --
+
+  -- gravity
+  if self:player_colliding_on_bottom(desired_x, desired_y) then
+    if self.current_gravity == 0 and love.keyboard.isDown("up") then
+      self.current_gravity = -app.config.JUMP_SPEED
+    else
+      self.current_gravity = 0
+    end
+  elseif self:player_colliding_on_top(desired_x, desired_y) then
+    --headbump
+    self.current_gravity = 0
+  else
+    self.current_gravity = self.current_gravity + (app.config.GRAVITY * dt)
+  end
+  desired_y = round(desired_y + (self.current_gravity * dt))
 
   if desired_y < self.y then
     if self:player_colliding_on_top(desired_x, desired_y) then
@@ -171,19 +177,31 @@ function Game:bottom_boundary(y)
 end
 
 function Game:player_colliding_on_left(x,y)
-  return not(self:tile_at_point(self:left_boundary(x), y) == 0)
+  return not(
+    (self:tile_at_point(self:left_boundary(x), self:top_boundary(y) + 1) == 0) and
+    (self:tile_at_point(self:left_boundary(x), self:bottom_boundary(y) - 1) == 0)
+  )
 end
 
 function Game:player_colliding_on_right(x,y)
-  return not(self:tile_at_point(self:right_boundary(x), y) == 0)
+  return not(
+    (self:tile_at_point(self:right_boundary(x), self:top_boundary(y) + 1) == 0) and
+    (self:tile_at_point(self:right_boundary(x), self:bottom_boundary(y) - 1) == 0)
+  )
 end
 
 function Game:player_colliding_on_top(x,y)
-  return not(self:tile_at_point(x, self:top_boundary(y)) == 0)
+  return not(
+    (self:tile_at_point(self:left_boundary(x) + 1, self:top_boundary(y)) == 0) and
+    (self:tile_at_point(self:right_boundary(x) - 1, self:top_boundary(y)) == 0)
+  )
 end
 
 function Game:player_colliding_on_bottom(x,y)
-  return not(self:tile_at_point(x, self:bottom_boundary(y)) == 0)
+  return not(
+    (self:tile_at_point(self:left_boundary(x) + 1, self:bottom_boundary(y)) == 0) and
+    (self:tile_at_point(self:right_boundary(x) - 1, self:bottom_boundary(y)) == 0)
+  )
 end
 
 function Game:clip_left(x)
