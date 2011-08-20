@@ -68,17 +68,20 @@ function Game:update(dt)
   if desired_x < self.x then
     if self:player_colliding_on_left(desired_x, desired_y) then
       self.x = self:clip_left(desired_x)
+      self:bump_left(dt)
     else
       self.x = desired_x
     end
   elseif desired_x > self.x then
     if self:player_colliding_on_right(desired_x, desired_y) then
       self.x = self:clip_right(desired_x)
+      self:bump_right(dt)
     else
       self.x = desired_x
     end
   end
   desired_x = self.x
+
   --
   -- y
   --
@@ -89,6 +92,10 @@ function Game:update(dt)
       self.current_gravity = -app.config.JUMP_SPEED
     else
       self.current_gravity = 0
+    end
+
+    if love.keyboard.isDown("down") or love.keyboard.isDown("s") then
+      self:bump_down(dt)
     end
   else
     self.current_gravity = self.current_gravity + (app.config.GRAVITY * dt)
@@ -154,9 +161,15 @@ function Game:tile_at_point(x,y)
 end
 
 function Game:tile_at_coord(coord)
-  local tile_x = round(1 + (coord.x / app.config.TILE_WIDTH))
-  local tile_y = round(1 + (coord.y / app.config.TILE_HEIGHT))
-  return self.map[tile_y][tile_x]
+  return self.map[self:tile_y(coord.y)][self:tile_y(coord.x)]
+end
+
+function Game:tile_x(x)
+  return round(1 + (x / app.config.TILE_WIDTH))
+end
+
+function Game:tile_y(y)
+  return round(1 + (y / app.config.TILE_HEIGHT))
 end
 
 function Game:left_boundary(x)
@@ -217,4 +230,16 @@ end
 
 function Game:clip_bottom(y)
   return y - (self:bottom_boundary(y) % app.config.TILE_WIDTH) + (app.config.TILE_WIDTH / 2)
+end
+
+function Game:bump_left(dt)
+  self.map[self:tile_y(self.y)][self:tile_x(self.x) - 1] = 0
+end
+
+function Game:bump_right(dt)
+  self.map[self:tile_y(self.y)][self:tile_x(self.x) + 1] = 0
+end
+
+function Game:bump_down(dt)
+  self.map[self:tile_y(self.y)+1][self:tile_x(self.x)] = 0
 end
