@@ -26,7 +26,7 @@ function Game:enterState()
     { 3, 2, 2, 2, 1, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2, 2, 2, 2, 1, 1, 3, 3},
     { 3, 3, 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 2, 1, 1, 2, 3},
     { 3, 3, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 2, 1, 1, 2, 3},
-    { 3, 2, 2, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 2, 1, 1, 2, 3},
+    { 3, 2, 2, 3, 3, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 3, 2, 1, 1, 2, 3},
     { 3, 2, 2, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 2, 1, 1, 2, 3},
     { 3, 2, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 2, 1, 1, 2, 3},
     { 3, 2, 2, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 2, 1, 1, 2, 3},
@@ -55,24 +55,35 @@ function Game:draw()
 end
 
 function Game:update(dt)
-  if (self:tile_at_point(self.x, self.y + (app.config.TILE_HEIGHT / 2)) == 0) then
+  if (self:tile_at_coord(self:bottom_boundary()) == 0) then
     self.current_gravity = self.current_gravity + (app.config.GRAVITY * dt)
-    self.y = self.y + (self.current_gravity * dt)
+    local new_y = self.y + (self.current_gravity * dt)
+    if self:tile_at_point(self.x, new_y) == 0 then
+      self.y = self.y + (self.current_gravity * dt)
+    end
   else
-    debug(self:tile_at_point(self.x, self.y))
     self.current_gravity = 0;
   end
 
   if love.keyboard.isDown("right") then
-    self.x = self.x + (app.config.SPEED * dt)
+    local new_x = self.x + (app.config.SPEED * dt)
+    if self:tile_at_point(new_x, self.y) == 0 then
+      self.x = new_x
+    end
   elseif love.keyboard.isDown("left") then
-    self.x = self.x - (app.config.SPEED * dt)
+    local new_x = self.x - (app.config.SPEED * dt)
+    if self:tile_at_point(new_x, self.y) == 0 then
+      self.x = new_x
+    end
   end
 
   if love.keyboard.isDown("down") then
-    self.y = self.y + (app.config.SPEED * dt)
+    -- self.y = self.y + (app.config.SPEED * dt)
   elseif love.keyboard.isDown("up") then
-    self.y = self.y - (app.config.SPEED * dt)
+    local new_y = self.y - (app.config.SPEED * dt)
+    if self:tile_at_point(self.x, new_y) == 0 then
+      self.y = new_y
+    end
   end
 
   if love.keyboard.isDown(" ") then
@@ -113,8 +124,32 @@ function Game:draw_map()
   end
 end
 
+function Game:coord()
+  return {x=self.x, y=self.y}
+end
+
 function Game:tile_at_point(x,y)
-  local tile_x = round(1 + (x / app.config.TILE_WIDTH))
-  local tile_y = round(1 + (y / app.config.TILE_HEIGHT))
+  return self:tile_at_coord({x=x,y=y})
+end
+
+function Game:tile_at_coord(coord)
+  local tile_x = round(1 + (coord.x / app.config.TILE_WIDTH))
+  local tile_y = round(1 + (coord.y / app.config.TILE_HEIGHT))
   return self.map[tile_y][tile_x]
+end
+
+function Game:left_boundary()
+  return {x=self.x - (app.config.TILE_WIDTH / 2), y=self.y}
+end
+
+function Game:right_boundary()
+  return {x=self.x + (app.config.TILE_WIDTH / 2), y=self.y}
+end
+
+function Game:top_boundary()
+  return {x=self.x, y=self.y - (app.config.TILE_WIDTH / 2)}
+end
+
+function Game:bottom_boundary()
+  return {x=self.x, y=self.y + (app.config.TILE_WIDTH / 2)}
 end
