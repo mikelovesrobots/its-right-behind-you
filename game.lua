@@ -52,6 +52,9 @@ function Game:enterState()
   self.break_x = 0
   self.break_y = 0
   self.break_dt = 0
+
+  -- lava
+  self.lava_dt = 0
 end
 
 function Game:draw()
@@ -122,6 +125,8 @@ function Game:update(dt)
       self.y = desired_y
     end
   end
+
+  self:update_lava_flow(dt)
 
   if love.keyboard.isDown("q") then
     screen_manager:popState()
@@ -296,4 +301,49 @@ end
 
 function Game:break_color()
   return 255 - (100 * self:break_percentage())
+end
+
+function Game:update_lava_flow(dt)
+  self.lava_dt = self.lava_dt + dt
+  if self.lava_dt > app.config.LAVA_LIMIT then
+    self:lava_flow()
+    self.lava_dt = 0
+  end
+end
+
+function Game:lava_flow()
+  local new_lava = {}
+  for y=1, (app.config.MAP_DISPLAY_HEIGHT + self.map_display_buffer) do
+    for x=1, (app.config.MAP_DISPLAY_WIDTH + self.map_display_buffer) do
+      if self.map[y][x] == 4 then
+        local tile_underneath = self.map[y + 1][x]
+        local tile_left = self.map[y][x - 1]
+        local tile_right = self.map[y][x + 1]
+
+        if tile_underneath == 0 then
+          table.push(new_lava, {y+1,x})
+        elseif tile_underneath >= 1 and tile_underneath <= 3 then
+          if tile_left == 0 then
+            table.push(new_lava, {y,x-1})
+          end
+
+          if tile_right == 0 then
+            table.push(new_lava, {y,x+1})
+          end
+        elseif tile_underneath == 4 then
+          if tile_left == 0 and math.random(1,round(1/app.config.LAVA_SPREAD_CHANCE)) == 1 then
+            table.push(new_lava, {y,x-1})
+          end
+
+          if tile_right == 0 and math.random(1,round(1/app.config.LAVA_SPREAD_CHANCE)) == 1 then
+            table.push(new_lava, {y,x+1})
+          end
+        end
+      end
+    end
+  end
+
+  table.each(new_lava, function(x)
+                         self.map[x[1]][x[2]] = 4
+                       end)
 end
