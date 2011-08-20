@@ -78,7 +78,7 @@ function Game:update(dt)
       self.x = desired_x
     end
   end
-
+  desired_x = self.x
   --
   -- y
   --
@@ -90,16 +90,15 @@ function Game:update(dt)
     else
       self.current_gravity = 0
     end
-  elseif self:player_colliding_on_top(desired_x, desired_y) then
-    --headbump
-    self.current_gravity = 0
   else
     self.current_gravity = self.current_gravity + (app.config.GRAVITY * dt)
   end
+
   desired_y = round(desired_y + (self.current_gravity * dt))
 
   if desired_y < self.y then
     if self:player_colliding_on_top(desired_x, desired_y) then
+      self.current_gravity = 0
       self.y = self:clip_top(desired_y)
     else
       self.y = desired_y
@@ -178,29 +177,29 @@ end
 
 function Game:player_colliding_on_left(x,y)
   return not(
-    (self:tile_at_point(self:left_boundary(x), self:top_boundary(y) + 1) == 0) and
-    (self:tile_at_point(self:left_boundary(x), self:bottom_boundary(y) - 1) == 0)
+    (self:tile_at_point(self:left_boundary(x), self:top_boundary(y) + 2) == 0) and
+    (self:tile_at_point(self:left_boundary(x), self:bottom_boundary(y) - 2) == 0)
   )
 end
 
 function Game:player_colliding_on_right(x,y)
   return not(
-    (self:tile_at_point(self:right_boundary(x), self:top_boundary(y) + 1) == 0) and
-    (self:tile_at_point(self:right_boundary(x), self:bottom_boundary(y) - 1) == 0)
+    (self:tile_at_point(self:right_boundary(x), self:top_boundary(y) + 2) == 0) and
+    (self:tile_at_point(self:right_boundary(x), self:bottom_boundary(y) - 2) == 0)
   )
 end
 
 function Game:player_colliding_on_top(x,y)
   return not(
-    (self:tile_at_point(self:left_boundary(x) + 1, self:top_boundary(y)) == 0) and
-    (self:tile_at_point(self:right_boundary(x) - 1, self:top_boundary(y)) == 0)
+    (self:tile_at_point(self:left_boundary(x) + 2, self:top_boundary(y)) == 0) and
+    (self:tile_at_point(self:right_boundary(x) - 2, self:top_boundary(y)) == 0)
   )
 end
 
 function Game:player_colliding_on_bottom(x,y)
   return not(
-    (self:tile_at_point(self:left_boundary(x) + 1, self:bottom_boundary(y)) == 0) and
-    (self:tile_at_point(self:right_boundary(x) - 1, self:bottom_boundary(y)) == 0)
+    (self:tile_at_point(self:left_boundary(x) + 2, self:bottom_boundary(y)) == 0) and
+    (self:tile_at_point(self:right_boundary(x) - 2, self:bottom_boundary(y)) == 0)
   )
 end
 
