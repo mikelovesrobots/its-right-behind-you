@@ -228,7 +228,10 @@ function Game:update(dt)
   end
 
   desired_x = round(desired_x)
-  if desired_x < self.x then
+  if desired_x < 1 - (app.config.TILE_WIDTH / 2) or desired_x > self:map_max_x() - (app.config.TILE_WIDTH / 2) then
+    -- stay on the goddamn map
+    desired_x = self.x
+  elseif desired_x < self.x then
     if self:player_colliding_on_left(desired_x, desired_y) then
       self.x = self:clip_left(desired_x)
       self:bump_left(dt)
@@ -263,10 +266,12 @@ function Game:update(dt)
   else
     self.current_gravity = self.current_gravity + (app.config.GRAVITY * dt)
   end
-
   desired_y = round(desired_y + (self.current_gravity * dt))
 
-  if desired_y < self.y then
+  if desired_y < 1 - (app.config.TILE_WIDTH / 2) or desired_y > self:map_max_y() - app.config.TILE_WIDTH then
+    -- stay on the goddamn map
+    desired_y = self.y
+  elseif desired_y < self.y then
     if self:player_colliding_on_top(desired_x, desired_y) then
       self.current_gravity = 0
       self.y = self:clip_top(desired_y)
@@ -392,6 +397,7 @@ function Game:clip_left(x)
   return x - (self:left_boundary(x) % app.config.TILE_WIDTH) + (app.config.TILE_WIDTH / 2)
 end
 
+
 function Game:clip_right(x)
   return x - (self:right_boundary(x) % app.config.TILE_WIDTH) + (app.config.TILE_WIDTH / 2)
 end
@@ -401,7 +407,12 @@ function Game:clip_top(y)
 end
 
 function Game:clip_bottom(y)
-  return y - (self:bottom_boundary(y) % app.config.TILE_WIDTH) + (app.config.TILE_WIDTH / 2)
+  if self:inside_map_y(y) then
+    return y - (self:bottom_boundary(y) % app.config.TILE_WIDTH) + (app.config.TILE_WIDTH / 2)
+  else
+    debug("wrapped around the map -- bottom")
+    return self:map_max_y() - (app.config.TILE_WIDTH / 2)
+  end
 end
 
 function Game:bump_left(dt)
@@ -472,13 +483,23 @@ function Game:lava_flow()
   for y=1, #self.map do
     for x=1, #self.map[y] do
       if self.map[y][x] == 4 then
-        local tile_underneath = self.map[y + 1][x]
-        local tile_left = self.map[y][x - 1]
-        local tile_right = self.map[y][x + 1]
+        local tile_underneath, tile_left, tile_right
 
-        if tile_underneath == 0 then
+        if self:inside_map_tiles(x, y + 1) then
+          tile_underneath = self.map[y + 1][x]
+        end
+
+        if self:inside_map_tiles(x - 1, y) then
+          tile_left = self.map[y][x - 1]
+        end
+
+        if self:inside_map_tiles(x + 1, y) then
+          tile_right = self.map[y][x + 1]
+        end
+
+        if tile_underneath and tile_underneath == 0 then
           table.push(new_lava, {y+1,x})
-        elseif tile_underneath >= 1 and tile_underneath <= 3 then
+        elseif tile_underneath and tile_underneath >= 1 and tile_underneath <= 3 then
           if tile_left == 0 then
             table.push(new_lava, {y,x-1})
           end
@@ -486,14 +507,10 @@ function Game:lava_flow()
           if tile_right == 0 then
             table.push(new_lava, {y,x+1})
           end
-        elseif tile_underneath == 4 then
-          if tile_left == 0 and math.random(1,round(1/app.config.LAVA_SPREAD_CHANCE)) == 1 then
-            table.push(new_lava, {y,x-1})
-          end
-
-          if tile_right == 0 and math.random(1,round(1/app.config.LAVA_SPREAD_CHANCE)) == 1 then
-            table.push(new_lava, {y,x+1})
-          end
+        elseif tile_left and tile_left == 0 and math.random(1,round(1/app.config.LAVA_SPREAD_CHANCE)) == 1 then
+          table.push(new_lava, {y,x-1})
+        elseif tile_right and tile_right == 0 and math.random(1,round(1/app.config.LAVA_SPREAD_CHANCE)) == 1 then
+          table.push(new_lava, {y,x+1})
         end
       end
     end
@@ -502,4 +519,29 @@ function Game:lava_flow()
   table.each(new_lava, function(x)
                          self.map[x[1]][x[2]] = 4
                        end)
+end
+
+function Game:inside_map(x, y)
+  return self:inside_map_x(x) and self:inside_map_y(y)
+end
+
+function Game:inside_map_tiles(x, y)
+  return self:inside_map_x(x * app.config.TILE_WIDTH) and self:inside_map_y(y * app.config.TILE_WIDTH)
+end
+
+
+function Game:inside_map_x(x)
+  return x >= 1 and x <= self:map_max_x()
+end
+
+function Game:map_max_x()
+  return #self.map[1] * app.config.TILE_WIDTH
+end
+
+function Game:inside_map_y(y)
+  return y >= 1 and y <= self:map_max_y()
+end
+
+function Game:map_max_y()
+  return #self.map * app.config.TILE_WIDTH
 end

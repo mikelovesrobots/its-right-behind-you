@@ -25,5 +25,6 @@ app.config = {
   PLAYER_BOTTOM = 16,
   BREAK_LIMIT = 0.25,
   LAVA_LIMIT = 0.25, --0.15 for expert
+  LAVA_JUMP_CHANCE = 0.1,
   LAVA_SPREAD_CHANCE = 0.25
 }
