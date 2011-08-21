@@ -74,7 +74,10 @@ function MainMenuScreen:reset_menu()
   debug("resetting the menu")
 
   self.menu = {
-    {label="Start New Game", f=self.start_new_game_selected},
+    {label="Start Beginner Game", f=self.start_easy_game_selected},
+    {label="Start Experienced Game", f=self.start_medium_game_selected},
+    {label="Start Expert Game", f=self.start_hard_game_selected},
+    {label="Start Nightmare Game", f=self.start_nightmare_game_selected},
     {label="About", f=self.about_selected},
     {label="Quit", f=self.quit_selected}
   }
@@ -87,7 +90,23 @@ function MainMenuScreen:regenerate_target_color()
   self.target_color = {math.random(200,255), math.random(200,255), math.random(100,255)}
 end
 
-function MainMenuScreen:start_new_game_selected()
+function MainMenuScreen:start_easy_game_selected()
+  app.config.LAVA_LIMIT = 0.33
+  screen_manager:pushState('Game')
+end
+
+function MainMenuScreen:start_medium_game_selected()
+  app.config.LAVA_LIMIT = 0.27
+  screen_manager:pushState('Game')
+end
+
+function MainMenuScreen:start_hard_game_selected()
+  app.config.LAVA_LIMIT = 0.20
+  screen_manager:pushState('Game')
+end
+
+function MainMenuScreen:start_nightmare_game_selected()
+  app.config.LAVA_LIMIT = 0.15
   screen_manager:pushState('Game')
 end
 
