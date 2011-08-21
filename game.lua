@@ -210,11 +210,29 @@ function Game:enterState()
 
   -- lava
   self.lava_dt = 0
+  self.death_dt = 0
+
 end
 
 function Game:draw()
   self:draw_map()
-  love.graphics.draw(app.config.PLAYER_IMAGE, self.x, self.y - self.map_y)
+  love.graphics.draw(app.config.PLAYER_IMAGE, self.x, self.y - self.map_y, self:death_radians(), self:death_scale(), self:death_scale())
+end
+
+function Game:death_radians()
+  if self:player_alive() then
+    return 0
+  else
+    return app.config.DEATH_ANIMATION_RADIANS * self.death_dt / app.config.DEATH_ANIMATION_LIMIT
+  end
+end
+
+function Game:death_scale()
+  if self:player_alive() then
+    return 1
+  else
+    return app.config.DEATH_ANIMATION_SCALE * self.death_dt / app.config.DEATH_ANIMATION_LIMIT
+  end
 end
 
 function Game:update(dt)
@@ -289,9 +307,13 @@ function Game:update(dt)
 
   self:update_lava_flow(dt)
 
-  if self:player_died() then
-    screen_manager:popState()
-    screen_manager:pushState('DeadScreen')
+  self:check_for_player_death()
+
+  if self:player_dying() then
+    if self.death_dt > app.config.DEATH_ANIMATION_LIMIT then
+      screen_manager:popState()
+      screen_manager:pushState('DeadScreen')
+    end
   end
 
   if love.keyboard.isDown("q") then
@@ -557,8 +579,10 @@ function Game:map_max_y()
   return  #self.map * app.config.TILE_WIDTH
 end
 
-function Game:player_died()
-  return self:lava_colliding()
+function Game:check_for_player_death()
+  if self:lava_colliding() then
+    self.death_dt = 0.01
+  end
 end
 
 function Game:lava_colliding()
@@ -568,4 +592,16 @@ function Game:lava_colliding()
                  self:tile_at_point(self.x, self:bottom_boundary(self.y))}
 
   return table.any(tiles, function(tile) return tile == 4 end)
+end
+
+function Game:player_dying()
+  return self.death_dt > 0
+end
+
+function Game:player_alive()
+  return not self:player_dying()
+end
+
+function Game:key_down(key)
+  return self:player_alive() and love.keyboard.isDown(key)
 end
