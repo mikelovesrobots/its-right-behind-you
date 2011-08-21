@@ -76,11 +76,11 @@ function Game:enterState()
     { 3, 3, 2, 1, 0, 0, 0, 3, 3, 2, 2, 4, 4, 3, 2, 2, 1, 2, 2, 3, 2, 1, 1, 2, 3},
     { 3, 2, 2, 3, 3, 0, 3, 3, 3, 3, 2, 2, 1, 1, 2, 1, 1, 2, 1, 3, 2, 1, 1, 2, 3},
     { 3, 2, 2, 3, 3, 0, 0, 3, 3, 0, 2, 2, 1, 1, 1, 1, 1, 1, 1, 3, 2, 1, 1, 2, 3},
-    { 3, 2, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2, 1, 3, 2, 1, 1, 2, 3},
-    { 3, 2, 2, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2, 1, 3, 2, 1, 1, 2, 3},
-    { 3, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 3, 2, 1, 1, 2, 3},
+    { 3, 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2, 1, 3, 2, 1, 1, 2, 3},
+    { 3, 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2, 1, 3, 2, 1, 1, 2, 3},
+    { 3, 2, 2, 3, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 3, 2, 1, 1, 2, 3},
     { 3, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 3, 2, 1, 1, 2, 3},
-    { 3, 2, 1, 2, 2, 2, 2, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 2, 3},
+    { 3, 2, 1, 1, 2, 2, 2, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 2, 3},
     { 3, 2, 1, 2, 2, 2, 0, 0, 0, 0, 0, 3, 0, 0, 2, 0, 0, 2, 2, 0, 0, 1, 2, 3, 3},
     { 3, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 3, 0, 2, 1, 0, 1, 1, 1, 1, 0, 1, 2, 3, 3},
     { 3, 1, 1, 1, 2, 4, 4, 4, 3, 2, 4, 4, 4, 2, 1, 0, 0, 0, 0, 1, 1, 2, 2, 3, 3},
@@ -100,16 +100,16 @@ function Game:enterState()
     { 3, 3, 2, 1, 0, 0, 0, 2, 2, 2, 1, 2, 1, 3, 2, 2, 2, 0, 0, 0, 2, 1, 1, 2, 3},
     { 3, 2, 2, 3, 3, 4, 4, 1, 3, 2, 0, 1, 1, 1, 1, 1, 1, 2, 0, 0, 2, 1, 1, 2, 3},
     { 3, 2, 2, 3, 3, 4, 4, 4, 3, 3, 0, 0, 0, 0, 2, 2, 2, 2, 0, 3, 2, 1, 1, 2, 3},
-    { 3, 2, 3, 3, 3, 4, 4, 4, 3, 3, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0, 2, 1, 1, 2, 3},
-    { 3, 2, 2, 3, 3, 4, 4, 4, 3, 1, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 1, 1, 2, 3},
+    { 3, 2, 3, 3, 3, 4, 4, 4, 3, 3, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 2, 1, 1, 2, 3},
+    { 3, 2, 2, 3, 3, 4, 4, 4, 3, 1, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 1, 1, 2, 3},
     { 3, 2, 2, 2, 2, 2, 2, 3, 3, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 2, 3},
-    { 3, 2, 2, 2, 2, 2, 2, 1, 1, 1, 0, 0, 0, 0, 2, 4, 1, 2, 0, 3, 2, 1, 1, 2, 3},
+    { 3, 2, 2, 2, 2, 2, 2, 1, 1, 1, 0, 0, 0, 0, 2, 3, 1, 2, 0, 3, 2, 1, 1, 2, 3},
     { 3, 2, 1, 2, 2, 2, 2, 1, 2, 0, 0, 0, 0, 0, 2, 4, 1, 1, 2, 3, 2, 1, 1, 2, 3},
-    { 3, 2, 1, 2, 2, 2, 1, 2, 0, 0, 0, 0, 3, 3, 1, 4, 1, 2, 2, 3, 2, 1, 2, 3, 3},
-    { 3, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 2, 2, 0, 1, 3, 1, 1, 1, 1, 2, 1, 2, 3, 3},
-    { 3, 1, 1, 1, 2, 2, 4, 4, 4, 4, 1, 2, 0, 0, 2, 3, 3, 3, 0, 1, 2, 2, 2, 3, 3},
-    { 3, 3, 1, 1, 1, 1, 4, 4, 4, 3, 3, 1, 1, 0, 2, 3, 3, 0, 0, 1, 2, 2, 2, 3, 3},
-    { 3, 3, 2, 1, 0, 2, 2, 0, 3, 3, 3, 2, 0, 2, 2, 3, 0, 0, 0, 3, 2, 1, 1, 2, 3},
+    { 3, 2, 1, 2, 2, 2, 1, 2, 0, 0, 0, 0, 3, 3, 3, 4, 4, 2, 2, 3, 2, 1, 2, 3, 3},
+    { 3, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 2, 2, 0, 3, 4, 4, 4, 1, 1, 2, 1, 2, 3, 3},
+    { 3, 1, 1, 1, 2, 2, 4, 4, 4, 4, 1, 2, 0, 0, 2, 3, 4, 3, 3, 1, 2, 2, 2, 3, 3},
+    { 3, 3, 1, 1, 1, 1, 4, 4, 4, 3, 3, 1, 1, 0, 2, 3, 3, 2, 3, 1, 2, 2, 2, 3, 3},
+    { 3, 3, 2, 1, 0, 2, 2, 0, 3, 3, 3, 2, 0, 2, 2, 3, 1, 2, 1, 3, 2, 1, 1, 2, 3},
     { 3, 2, 2, 3, 3, 0, 2, 1, 1, 3, 3, 2, 1, 1, 1, 1, 1, 0, 0, 3, 2, 1, 1, 2, 3},
     { 3, 2, 2, 3, 3, 0, 2, 2, 3, 3, 2, 2, 2, 2, 2, 0, 0, 0, 0, 3, 2, 1, 1, 2, 3},
     { 3, 3, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 2, 2, 2, 2, 0, 0, 0, 1, 2, 2, 2, 3, 3},
@@ -126,22 +126,22 @@ function Game:enterState()
     { 3, 1, 1, 1, 2, 2, 4, 1, 1, 4, 4, 4, 1, 1, 0, 0, 0, 0, 0, 1, 2, 2, 2, 3, 3},
     { 3, 3, 1, 1, 1, 1, 1, 1, 1, 4, 4, 4, 1, 2, 2, 0, 0, 0, 0, 1, 2, 2, 2, 3, 3},
     { 3, 3, 2, 1, 0, 0, 1, 1, 1, 1, 4, 4, 1, 1, 2, 3, 0, 0, 0, 3, 2, 1, 1, 2, 3},
-    { 3, 2, 2, 3, 3, 0, 0, 1, 1, 1, 2, 1, 1, 1, 1, 3, 1, 0, 0, 3, 2, 1, 1, 2, 3},
-    { 3, 2, 2, 3, 3, 0, 0, 0, 0, 2, 2, 2, 0, 0, 3, 3, 1, 1, 0, 3, 2, 1, 1, 2, 3},
-    { 3, 2, 3, 3, 3, 0, 0, 0, 0, 2, 2, 0, 3, 4, 1, 3, 1, 1, 4, 4, 2, 1, 1, 2, 3},
+    { 3, 2, 2, 3, 3, 0, 0, 1, 1, 1, 2, 1, 1, 1, 1, 3, 0, 0, 0, 3, 2, 1, 1, 2, 3},
+    { 3, 2, 2, 3, 3, 0, 0, 0, 0, 2, 2, 2, 0, 0, 3, 3, 0, 1, 0, 3, 2, 1, 1, 2, 3},
+    { 3, 2, 3, 3, 3, 0, 0, 0, 0, 2, 2, 0, 3, 4, 1, 3, 2, 1, 4, 4, 2, 1, 1, 2, 3},
     { 3, 2, 2, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 1, 3, 3, 3, 4, 4, 4, 1, 1, 2, 3},
     { 3, 2, 2, 2, 2, 2, 2, 4, 4, 4, 4, 2, 3, 2, 3, 3, 1, 1, 1, 4, 2, 1, 1, 2, 3},
     { 3, 2, 2, 2, 2, 2, 2, 3, 4, 4, 4, 2, 3, 2, 0, 3, 1, 2, 2, 3, 2, 1, 1, 2, 3},
     { 3, 2, 1, 2, 2, 2, 2, 3, 3, 2, 1, 2, 3, 0, 0, 0, 1, 1, 2, 3, 2, 1, 1, 2, 3},
     { 3, 2, 1, 2, 2, 2, 2, 3, 3, 2, 1, 0, 0, 0, 0, 0, 1, 2, 2, 3, 2, 1, 2, 3, 3},
-    { 3, 1, 1, 1, 1, 1, 1, 3, 2, 1, 2, 1, 0, 0, 0, 0, 1, 1, 1, 1, 2, 1, 2, 3, 3},
-    { 3, 1, 1, 1, 2, 2, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 3, 3},
+    { 3, 1, 1, 1, 1, 1, 1, 3, 2, 1, 2, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 1, 2, 3, 3},
+    { 3, 1, 1, 1, 2, 2, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 3, 3},
     { 3, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 3, 2, 1, 1, 2, 3},
     { 3, 2, 1, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2, 3, 2, 1, 1, 2, 3},
-    { 3, 2, 1, 2, 2, 2, 0, 3, 2, 1, 1, 4, 4, 4, 4, 4, 1, 2, 2, 3, 2, 1, 2, 3, 3},
-    { 3, 1, 1, 1, 1, 1, 0, 0, 2, 1, 1, 4, 4, 4, 2, 2, 1, 1, 1, 1, 2, 1, 2, 3, 3},
-    { 3, 1, 1, 1, 2, 2, 0, 0, 2, 2, 1, 1, 4, 2, 2, 2, 2, 0, 0, 1, 2, 2, 2, 3, 3},
-    { 3, 3, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 2, 2, 2, 2, 0, 0, 0, 1, 2, 2, 2, 3, 3},
+    { 3, 2, 1, 2, 2, 2, 0, 3, 2, 1, 1, 3, 0, 0, 0, 0, 1, 2, 2, 3, 2, 1, 2, 3, 3},
+    { 3, 1, 1, 1, 1, 1, 0, 0, 2, 1, 1, 4, 4, 4, 4, 2, 1, 1, 1, 1, 2, 1, 2, 3, 3},
+    { 3, 1, 1, 1, 2, 2, 0, 0, 2, 2, 1, 1, 4, 4, 4, 2, 2, 0, 0, 1, 2, 2, 2, 3, 3},
+    { 3, 3, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 2, 4, 2, 2, 0, 0, 0, 1, 2, 2, 2, 3, 3},
     { 3, 3, 2, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2, 0, 0, 0, 0, 0, 3, 2, 1, 1, 2, 3},
     { 3, 2, 2, 3, 3, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 3, 2, 1, 1, 2, 3},
     { 3, 2, 2, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 2, 1, 1, 2, 3},
@@ -232,14 +232,14 @@ function Game:update(dt)
     -- stay on the goddamn map
     desired_x = self.x
   elseif desired_x < self.x then
-    if self:player_colliding_on_left(desired_x, desired_y) then
+    if self:tile_colliding_on_left(desired_x, desired_y) then
       self.x = self:clip_left(desired_x)
       self:bump_left(dt)
     else
       self.x = desired_x
     end
   elseif desired_x > self.x then
-    if self:player_colliding_on_right(desired_x, desired_y) then
+    if self:tile_colliding_on_right(desired_x, desired_y) then
       self.x = self:clip_right(desired_x)
       self:bump_right(dt)
     else
@@ -253,7 +253,7 @@ function Game:update(dt)
   --
 
   -- gravity
-  if self:player_colliding_on_bottom(desired_x, desired_y) then
+  if self:tile_colliding_on_bottom(desired_x, desired_y) then
     if self.current_gravity == 0 and (love.keyboard.isDown(" ") or love.keyboard.isDown("up") or love.keyboard.isDown("w")) then
       self.current_gravity = -app.config.JUMP_SPEED
     else
@@ -272,14 +272,14 @@ function Game:update(dt)
     -- stay on the goddamn map
     desired_y = self.y
   elseif desired_y < self.y then
-    if self:player_colliding_on_top(desired_x, desired_y) then
+    if self:tile_colliding_on_top(desired_x, desired_y) then
       self.current_gravity = 0
       self.y = self:clip_top(desired_y)
     else
       self.y = desired_y
     end
   elseif desired_y > self.y then
-    if self:player_colliding_on_bottom(desired_x, desired_y) then
+    if self:tile_colliding_on_bottom(desired_x, desired_y) then
       self.y = self:clip_bottom(desired_y)
     else
       self.y = desired_y
@@ -288,6 +288,11 @@ function Game:update(dt)
   self.map_y = self.y - 300
 
   self:update_lava_flow(dt)
+
+  if self:player_died() then
+    screen_manager:popState()
+    screen_manager:pushState('DeadScreen')
+  end
 
   if love.keyboard.isDown("q") then
     screen_manager:popState()
@@ -365,32 +370,38 @@ function Game:bottom_boundary(y)
   return y + app.config.PLAYER_BOTTOM
 end
 
-function Game:player_colliding_on_left(x,y)
-  return not(
-    (self:tile_at_point(self:left_boundary(x), self:top_boundary(y) + 2) == 0) and
-    (self:tile_at_point(self:left_boundary(x), self:bottom_boundary(y) - 2) == 0)
-  )
+function Game:tile_is_walkable(tile)
+  return tile == 0
 end
 
-function Game:player_colliding_on_right(x,y)
-  return not(
-    (self:tile_at_point(self:right_boundary(x), self:top_boundary(y) + 2) == 0) and
-    (self:tile_at_point(self:right_boundary(x), self:bottom_boundary(y) - 2) == 0)
-  )
+function Game:first_solid_tile(tiles)
+  return table.detect(tiles, function(tile)
+                               if not self:tile_is_walkable(tile) then
+                                 return tile
+                               else
+                                 return nil
+                               end
+                             end)
 end
 
-function Game:player_colliding_on_top(x,y)
-  return not(
-    (self:tile_at_point(self:left_boundary(x) + 2, self:top_boundary(y)) == 0) and
-    (self:tile_at_point(self:right_boundary(x) - 2, self:top_boundary(y)) == 0)
-  )
+function Game:tile_colliding_on_left(x,y)
+  return self:first_solid_tile({self:tile_at_point(self:left_boundary(x), self:top_boundary(y) + 2),
+                                self:tile_at_point(self:left_boundary(x), self:bottom_boundary(y) - 2)})
 end
 
-function Game:player_colliding_on_bottom(x,y)
-  return not(
-    (self:tile_at_point(self:left_boundary(x) + 2, self:bottom_boundary(y)) == 0) and
-    (self:tile_at_point(self:right_boundary(x) - 2, self:bottom_boundary(y)) == 0)
-  )
+function Game:tile_colliding_on_right(x,y)
+  return self:first_solid_tile({self:tile_at_point(self:right_boundary(x), self:top_boundary(y) + 2),
+                                self:tile_at_point(self:right_boundary(x), self:bottom_boundary(y) - 2)})
+end
+
+function Game:tile_colliding_on_top(x,y)
+  return self:first_solid_tile({self:tile_at_point(self:left_boundary(x) + 2, self:top_boundary(y)),
+                                self:tile_at_point(self:right_boundary(x) - 2, self:top_boundary(y))})
+end
+
+function Game:tile_colliding_on_bottom(x,y)
+  return self:first_solid_tile({self:tile_at_point(self:left_boundary(x) + 2, self:bottom_boundary(y)),
+                                self:tile_at_point(self:right_boundary(x) - 2, self:bottom_boundary(y))})
 end
 
 function Game:clip_left(x)
@@ -543,5 +554,18 @@ function Game:inside_map_y(y)
 end
 
 function Game:map_max_y()
-  return #self.map * app.config.TILE_WIDTH
+  return  #self.map * app.config.TILE_WIDTH
+end
+
+function Game:player_died()
+  return self:lava_colliding()
+end
+
+function Game:lava_colliding()
+  local tiles = {self:tile_at_point(self:left_boundary(self.x), self.y),
+                 self:tile_at_point(self:right_boundary(self.x), self.y),
+                 self:tile_at_point(self.x, self:top_boundary(self.y)),
+                 self:tile_at_point(self.x, self:bottom_boundary(self.y))}
+
+  return table.any(tiles, function(tile) return tile == 4 end)
 end

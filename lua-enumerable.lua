@@ -16,6 +16,10 @@ table.detect = function(list, func)
   return(nil)
 end
 
+table.any = function(list, f)
+  return not not table.detect(list, f)
+end
+
 table.without = function(list, item)
   return table.reject(list, function (x)
     return x == item
