@@ -10,7 +10,8 @@ app.config = {
   TILES = {love.graphics.newImage("images/dirt1.png"),
            love.graphics.newImage("images/dirt2.png"),
            love.graphics.newImage("images/dirt3.png"),
-           love.graphics.newImage("images/lava.png")},
+           love.graphics.newImage("images/lava.png"),
+           love.graphics.newImage("images/highlight.png")},
   GRAVITY = 400,
   SPEED = 250,
   JUMP_SPEED = 300,
@@ -24,5 +25,5 @@ app.config = {
   PLAYER_BOTTOM = 16,
   BREAK_LIMIT = 0.25,
   LAVA_LIMIT = 0.25,
-  LAVA_SPREAD_CHANCE = 0.15
+  LAVA_SPREAD_CHANCE = 0.25
 }
