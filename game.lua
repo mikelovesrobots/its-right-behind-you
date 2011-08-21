@@ -236,6 +236,17 @@ function Game:death_scale()
 end
 
 function Game:update(dt)
+  if self:player_dying() then
+    self.death_dt = self.death_dt + dt
+    if self.death_dt > app.config.DEATH_ANIMATION_LIMIT then
+      screen_manager:popState()
+      screen_manager:pushState('DeadScreen')
+    else
+      self:update_lava_flow(dt)
+    end
+    return
+  end
+
   local desired_x = self.x
   local desired_y = self.y
 
@@ -306,15 +317,7 @@ function Game:update(dt)
   self.map_y = self.y - 300
 
   self:update_lava_flow(dt)
-
   self:check_for_player_death()
-
-  if self:player_dying() then
-    if self.death_dt > app.config.DEATH_ANIMATION_LIMIT then
-      screen_manager:popState()
-      screen_manager:pushState('DeadScreen')
-    end
-  end
 
   if love.keyboard.isDown("q") then
     screen_manager:popState()
@@ -580,7 +583,7 @@ function Game:map_max_y()
 end
 
 function Game:check_for_player_death()
-  if self:lava_colliding() then
+  if self:player_alive() and self:lava_colliding() then
     self.death_dt = 0.01
   end
 end
