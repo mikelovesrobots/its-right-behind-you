@@ -19,7 +19,7 @@ end
 function MainMenuScreen:draw()
   love.graphics.setFont(app.config.TITLE_FONT);
   set_color(self.current_color)
-  love.graphics.printf(app.config.TITLE, 0, 200, 800, 'center')
+  love.graphics.printf(app.config.TITLE, 0, 150, 800, 'center')
 
   love.graphics.setFont(app.config.MENU_FONT);
   set_color(app.config.MENU_REGULAR_COLOR)
@@ -30,8 +30,10 @@ function MainMenuScreen:draw()
       text = "[ " .. text .. " ]"
     end
 
-    love.graphics.printf(text, 0, 300 + (25 * i), 800, 'center')
+    love.graphics.printf(text, 0, 250 + (25 * i), 800, 'center')
   end
+
+  love.graphics.printf("Instructions: use the arrows for movement or wasd/space. q quits.", 0, 500, 800, 'center')
 end
 
 function MainMenuScreen:keypressed(key, unicode)
@@ -49,8 +51,12 @@ function MainMenuScreen:keypressed(key, unicode)
     end
   end
 
-  if (key == "return") then
+  if (key == "return" or key == "space") then
     self.menu[self.menu_index].f()
+  end
+
+  if (key == "q" or key == "escape") then
+    self.quit_selected()
   end
 end
 

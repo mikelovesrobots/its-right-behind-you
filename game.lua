@@ -326,7 +326,7 @@ function Game:update(dt)
     screen_manager:pushState('WinScreen')
   end
 
-  if love.keyboard.isDown("q") then
+  if love.keyboard.isDown("q") or love.keyboard.isDown("escape") then
     screen_manager:popState()
   end
 end
