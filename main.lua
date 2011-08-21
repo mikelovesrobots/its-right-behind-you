@@ -9,6 +9,7 @@ require('screen_manager')
 require('main_menu_screen')
 require('about_screen')
 require('dead_screen')
+require('win_screen')
 require('game')
 
 DEBUG = true

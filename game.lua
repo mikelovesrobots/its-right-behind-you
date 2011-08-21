@@ -8,6 +8,7 @@ function Game:enterState()
   self.x = 400
   self.y = 80
   self.current_gravity = 0
+  self.start_time = love.timer.getMicroTime()
 
   self.map = {
     { 3, 3, 3, 3, 3, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 3, 2, 3, 1, 1, 1},
@@ -319,6 +320,12 @@ function Game:update(dt)
   self:update_lava_flow(dt)
   self:check_for_player_death()
 
+  if self:win_colliding() then
+    self:stop_timer()
+    screen_manager:popState()
+    screen_manager:pushState('WinScreen')
+  end
+
   if love.keyboard.isDown("q") then
     screen_manager:popState()
   end
@@ -585,16 +592,29 @@ end
 function Game:check_for_player_death()
   if self:player_alive() and self:lava_colliding() then
     self.death_dt = 0.01
+    self:stop_timer()
   end
 end
 
+function Game:stop_timer()
+  self.elapsed_time = love.timer.getMicroTime() - self.start_time
+end
+
+function Game:win_colliding()
+  return self:is_touching_tile(function (tile) return tile == 5 end)
+end
+
 function Game:lava_colliding()
+  return self:is_touching_tile(function (tile) return tile == 4 end)
+end
+
+function Game:is_touching_tile(func)
   local tiles = {self:tile_at_point(self:left_boundary(self.x), self.y),
                  self:tile_at_point(self:right_boundary(self.x), self.y),
                  self:tile_at_point(self.x, self:top_boundary(self.y)),
                  self:tile_at_point(self.x, self:bottom_boundary(self.y))}
 
-  return table.any(tiles, function(tile) return tile == 4 end)
+  return table.any(tiles, func)
 end
 
 function Game:player_dying()
