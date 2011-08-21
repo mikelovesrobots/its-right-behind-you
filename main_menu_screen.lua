@@ -51,7 +51,7 @@ function MainMenuScreen:keypressed(key, unicode)
     end
   end
 
-  if (key == "return" or key == "space") then
+  if (key == "return" or key == " ") then
     self.menu[self.menu_index].f()
   end
 
@@ -80,10 +80,10 @@ function MainMenuScreen:reset_menu()
   debug("resetting the menu")
 
   self.menu = {
-    {label="Start Beginner Game", f=self.start_easy_game_selected},
-    {label="Start Experienced Game", f=self.start_medium_game_selected},
-    {label="Start Expert Game", f=self.start_hard_game_selected},
-    {label="Start Nightmare Game", f=self.start_nightmare_game_selected},
+    {label="Beginner", f=self.start_easy_game_selected},
+    {label="Experienced", f=self.start_medium_game_selected},
+    {label="Expert", f=self.start_hard_game_selected},
+    {label="Nightmare", f=self.start_nightmare_game_selected},
     {label="About", f=self.about_selected},
     {label="Quit", f=self.quit_selected}
   }
