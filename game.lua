@@ -219,7 +219,7 @@ end
 
 function Game:draw()
   self:draw_map()
-  love.graphics.draw(app.config.PLAYER_IMAGE, self.x, self.y - self.map_y, self:death_radians(), self:death_scale(), self:death_scale())
+  love.graphics.draw(app.config.PLAYER_IMAGE, self:player_display_x(), self:player_display_y(), self:death_radians(), self:player_scale_x(), self:player_scale_y())
 end
 
 function Game:death_radians()
@@ -230,12 +230,40 @@ function Game:death_radians()
   end
 end
 
-function Game:death_scale()
+function Game:player_display_x()
+  if self.facing_right then
+    return self.x
+  else
+    return self.x + app.config.TILE_WIDTH
+  end
+end
+
+function Game:player_display_y()
+  return self.y - self.map_y
+end
+
+function Game:player_scale_x()
+  if self:player_alive() then
+    if self.facing_right then
+      return 1
+    else
+      return -1
+    end
+  else
+    return self:death_scale()
+  end
+end
+
+function Game:player_scale_y()
   if self:player_alive() then
     return 1
   else
-    return app.config.DEATH_ANIMATION_SCALE * self.death_dt / app.config.DEATH_ANIMATION_LIMIT
+    return self:death_scale()
   end
+end
+
+function Game:death_scale()
+  return app.config.DEATH_ANIMATION_SCALE * self.death_dt / app.config.DEATH_ANIMATION_LIMIT
 end
 
 function Game:update(dt)
@@ -255,8 +283,10 @@ function Game:update(dt)
 
   if love.keyboard.isDown("left") or love.keyboard.isDown("a") then
     desired_x = desired_x - (app.config.SPEED * dt)
+    self.facing_right = false
   elseif love.keyboard.isDown("right") or love.keyboard.isDown("d") then
     desired_x = desired_x + (app.config.SPEED * dt)
+    self.facing_right = true
   end
 
   desired_x = round(desired_x)
