@@ -246,7 +246,7 @@ function Game:update(dt)
   end
 
   desired_x = round(desired_x)
-  if desired_x < 1 - (app.config.TILE_WIDTH / 2) or desired_x > self:map_max_x() - (app.config.TILE_WIDTH / 2) then
+  if desired_x < 2 - (app.config.TILE_WIDTH / 2) or desired_x > self:map_max_x() - (app.config.TILE_WIDTH / 2) then
     -- stay on the goddamn map
     desired_x = self.x
   elseif desired_x < self.x then
