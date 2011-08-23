@@ -9,6 +9,8 @@ function Game:enterState()
   self.y = 80
   self.current_gravity = 0
   self.start_time = love.timer.getMicroTime()
+  self.new_lava = {}
+  self.facing_right = true
 
   self.map = {
     { 3, 3, 3, 3, 3, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 3, 2, 3, 1, 1, 1},
@@ -51,16 +53,16 @@ function Game:enterState()
     { 3, 1, 3, 1, 4, 4, 4, 2, 3, 4, 4, 4, 4, 3, 3, 0, 0, 0, 0, 3, 3, 3, 1, 1, 3},
     { 3, 1, 3, 1, 4, 4, 3, 1, 3, 2, 4, 4, 1, 2, 3, 2, 0, 0, 0, 1, 2, 3, 1, 2, 3},
     { 3, 2, 2, 2, 1, 1, 3, 3, 3, 2, 1, 1, 1, 2, 3, 2, 0, 0, 0, 1, 2, 2, 1, 2, 3},
-    { 3, 1, 2, 1, 1, 1, 0, 0, 0, 2, 2, 1, 1, 0, 1, 2, 0, 0, 2, 1, 2, 2, 2, 2, 3},
-    { 3, 1, 1, 1, 1, 2, 2, 0, 0, 0, 1, 1, 1, 0, 1, 2, 2, 0, 2, 2, 3, 2, 2, 3, 3},
+    { 3, 1, 2, 1, 1, 1, 1, 2, 1, 2, 2, 1, 1, 0, 1, 2, 0, 0, 2, 1, 2, 2, 2, 2, 3},
+    { 3, 1, 1, 1, 1, 2, 2, 2, 1, 0, 1, 1, 1, 0, 1, 2, 2, 0, 2, 2, 3, 2, 2, 3, 3},
     { 3, 2, 2, 2, 1, 3, 3, 3, 1, 0, 0, 1, 0, 0, 0, 1, 1, 2, 2, 2, 3, 2, 2, 3, 3},
     { 3, 2, 1, 1, 1, 3, 2, 3, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2, 1, 2, 3, 2, 1, 3, 1},
     { 3, 2, 2, 2, 2, 3, 2, 3, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2, 1, 2, 3, 1, 1, 3, 3},
-    { 3, 2, 2, 2, 1, 3, 3, 3, 0, 2, 4, 4, 4, 3, 1, 1, 1, 2, 2, 2, 2, 1, 1, 3, 3},
+    { 3, 2, 2, 2, 1, 3, 3, 3, 0, 2, 0, 0, 0, 3, 1, 1, 1, 2, 2, 2, 2, 1, 1, 3, 3},
     { 3, 3, 2, 1, 1, 1, 1, 0, 0, 2, 2, 4, 2, 3, 3, 3, 3, 3, 3, 3, 2, 1, 1, 2, 3},
     { 3, 3, 2, 1, 0, 0, 1, 1, 2, 2, 2, 4, 2, 2, 2, 2, 3, 3, 3, 3, 2, 1, 1, 2, 3},
     { 3, 2, 2, 3, 3, 0, 1, 1, 1, 2, 2, 2, 2, 2, 1, 2, 1, 3, 3, 3, 2, 1, 1, 2, 3},
-    { 3, 2, 2, 3, 0, 0, 0, 1, 1, 0, 0, 2, 2, 2, 2, 2, 0, 0, 0, 3, 2, 1, 1, 2, 3},
+    { 3, 2, 2, 3, 0, 0, 0, 1, 1, 0, 0, 2, 2, 0, 2, 2, 0, 0, 0, 3, 2, 1, 1, 2, 3},
     { 3, 2, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 2, 1, 1, 2, 3},
     { 3, 2, 4, 4, 4, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 2, 1, 1, 2, 3},
     { 3, 2, 2, 4, 4, 4, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 3, 2, 1, 1, 2, 3},
@@ -217,23 +219,7 @@ end
 
 function Game:draw()
   self:draw_map()
-  love.graphics.draw(app.config.PLAYER_IMAGE, self.x, self.y - self.map_y, self:death_radians(), self:death_scale(), self:death_scale())
-end
-
-function Game:death_radians()
-  if self:player_alive() then
-    return 0
-  else
-    return app.config.DEATH_ANIMATION_RADIANS * self.death_dt / app.config.DEATH_ANIMATION_LIMIT
-  end
-end
-
-function Game:death_scale()
-  if self:player_alive() then
-    return 1
-  else
-    return app.config.DEATH_ANIMATION_SCALE * self.death_dt / app.config.DEATH_ANIMATION_LIMIT
-  end
+  love.graphics.draw(app.config.PLAYER_IMAGE, self:player_display_x(), self:player_display_y(), self:death_radians(), self:player_scale_x(), self:player_scale_y())
 end
 
 function Game:update(dt)
@@ -253,12 +239,14 @@ function Game:update(dt)
 
   if love.keyboard.isDown("left") or love.keyboard.isDown("a") then
     desired_x = desired_x - (app.config.SPEED * dt)
+    self.facing_right = false
   elseif love.keyboard.isDown("right") or love.keyboard.isDown("d") then
     desired_x = desired_x + (app.config.SPEED * dt)
+    self.facing_right = true
   end
 
   desired_x = round(desired_x)
-  if desired_x < 1 - (app.config.TILE_WIDTH / 2) or desired_x > self:map_max_x() - (app.config.TILE_WIDTH / 2) then
+  if desired_x < 2 - (app.config.TILE_WIDTH / 2) or desired_x > self:map_max_x() - (app.config.TILE_WIDTH / 2) then
     -- stay on the goddamn map
     desired_x = self.x
   elseif desired_x < self.x then
@@ -347,7 +335,11 @@ function Game:draw_map()
       if x + first_tile_x == self.break_x and y + first_tile_y == self.break_y then
         love.graphics.setColor(self:break_color(), self:break_color(), self:break_color())
       else
-        love.graphics.setColor(255,255,255)
+        if self:tile_is_new_lava(x + first_tile_x, y + first_tile_y) then
+          love.graphics.setColor(self:new_lava_color(), self:new_lava_color(), self:new_lava_color())
+        else
+          love.graphics.setColor(255,255,255)
+        end
       end
 
       -- Note that this condition block allows us to go beyond the edge of the map.
@@ -522,7 +514,7 @@ function Game:update_lava_flow(dt)
 end
 
 function Game:lava_flow()
-  local new_lava = {}
+  self.new_lava = {}
   for y=1, #self.map do
     for x=1, #self.map[y] do
       if self.map[y][x] == 4 then
@@ -541,25 +533,25 @@ function Game:lava_flow()
         end
 
         if tile_underneath and tile_underneath == 0 then
-          table.push(new_lava, {y+1,x})
+          table.push(self.new_lava, {y+1,x})
         elseif tile_underneath and tile_underneath >= 1 and tile_underneath <= 3 then
           if tile_left == 0 then
-            table.push(new_lava, {y,x-1})
+            table.push(self.new_lava, {y,x-1})
           end
 
           if tile_right == 0 then
-            table.push(new_lava, {y,x+1})
+            table.push(self.new_lava, {y,x+1})
           end
         elseif tile_left and tile_left == 0 and math.random(1,round(1/app.config.LAVA_SPREAD_CHANCE)) == 1 then
-          table.push(new_lava, {y,x-1})
+          table.push(self.new_lava, {y,x-1})
         elseif tile_right and tile_right == 0 and math.random(1,round(1/app.config.LAVA_SPREAD_CHANCE)) == 1 then
-          table.push(new_lava, {y,x+1})
+          table.push(self.new_lava, {y,x+1})
         end
       end
     end
   end
 
-  table.each(new_lava, function(x)
+  table.each(self.new_lava, function(x)
                          self.map[x[1]][x[2]] = 4
                        end)
 end
@@ -627,4 +619,56 @@ end
 
 function Game:key_down(key)
   return self:player_alive() and love.keyboard.isDown(key)
+end
+
+function Game:tile_is_new_lava(x,y)
+  return table.any(self.new_lava, function (pair) return pair[1] == y and pair[2] == x end)
+end
+
+function Game:new_lava_color()
+  return 100 + 155 * self.lava_dt / app.config.LAVA_LIMIT
+end
+
+function Game:death_radians()
+  if self:player_alive() then
+    return 0
+  else
+    return app.config.DEATH_ANIMATION_RADIANS * self.death_dt / app.config.DEATH_ANIMATION_LIMIT
+  end
+end
+
+function Game:player_display_x()
+  if self.facing_right then
+    return self.x
+  else
+    return self.x + app.config.TILE_WIDTH
+  end
+end
+
+function Game:player_display_y()
+  return self.y - self.map_y
+end
+
+function Game:player_scale_x()
+  if self:player_alive() then
+    if self.facing_right then
+      return 1
+    else
+      return -1
+    end
+  else
+    return self:death_scale()
+  end
+end
+
+function Game:player_scale_y()
+  if self:player_alive() then
+    return 1
+  else
+    return self:death_scale()
+  end
+end
+
+function Game:death_scale()
+  return app.config.DEATH_ANIMATION_SCALE * self.death_dt / app.config.DEATH_ANIMATION_LIMIT
 end
