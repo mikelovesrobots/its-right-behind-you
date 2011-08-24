@@ -4,6 +4,9 @@ Level1:include(Game)
 function Level1:initialize_level()
   love.graphics.setBackgroundColor(35, 15, 43)
 
+  self.x = 400
+  self.y = 80
+
   self.tiles = {
     love.graphics.newImage("images/dirt1.png"),
     love.graphics.newImage("images/dirt2.png"),
