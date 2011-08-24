@@ -80,6 +80,7 @@ function MainMenuScreen:reset_menu()
   debug("resetting the menu")
 
   self.menu = {
+    {label="Dev", f=self.start_dev_game_selected},
     {label="Beginner", f=self.start_easy_game_selected},
     {label="Experienced", f=self.start_medium_game_selected},
     {label="Expert", f=self.start_hard_game_selected},
@@ -98,22 +99,27 @@ end
 
 function MainMenuScreen:start_easy_game_selected()
   app.config.LAVA_LIMIT = 0.33
-  screen_manager:pushState('Game')
+  screen_manager:pushState('Level1')
 end
 
 function MainMenuScreen:start_medium_game_selected()
   app.config.LAVA_LIMIT = 0.27
-  screen_manager:pushState('Game')
+  screen_manager:pushState('Level1')
 end
 
 function MainMenuScreen:start_hard_game_selected()
   app.config.LAVA_LIMIT = 0.20
-  screen_manager:pushState('Game')
+  screen_manager:pushState('Level1')
 end
 
 function MainMenuScreen:start_nightmare_game_selected()
   app.config.LAVA_LIMIT = 0.15
-  screen_manager:pushState('Game')
+  screen_manager:pushState('Level1')
+end
+
+function MainMenuScreen:start_dev_game_selected()
+  app.config.LAVA_LIMIT = 0.20
+  screen_manager:pushState('Level2')
 end
 
 function MainMenuScreen:about_selected()

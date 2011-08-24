@@ -11,6 +11,8 @@ require('about_screen')
 require('dead_screen')
 require('win_screen')
 require('game')
+require('levels/level1')
+require('levels/level2')
 
 DEBUG = true
 
