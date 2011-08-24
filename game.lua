@@ -11,7 +11,7 @@ function Game:enterState()
   self.start_time = love.timer.getMicroTime()
   self.new_lava = {}
   self.facing_right = true
-  self.level = 1
+  self.level = 2
   self.map = self:copy_level(app.levels[self.level])
 
   -- map variables
