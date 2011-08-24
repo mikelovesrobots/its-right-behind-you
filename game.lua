@@ -38,6 +38,10 @@ end
 function Game:draw()
   self:draw_map()
   love.graphics.draw(app.config.PLAYER_IMAGE, self:player_display_x(), self:player_display_y(), self:death_radians(), self:player_scale_x(), self:player_scale_y())
+  self:level_draw()
+end
+
+function Game:level_draw()
 end
 
 function Game:update(dt)

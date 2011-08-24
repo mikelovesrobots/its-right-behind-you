@@ -5,7 +5,7 @@ function Level2:initialize_level()
   love.graphics.setBackgroundColor(20, 109, 204);
 
   self.x = 380
-  self.y = 444
+  self.y = 318 -- 444
 
   self.tiles = {
     love.graphics.newImage("images/concrete.png"),
@@ -14,8 +14,15 @@ function Level2:initialize_level()
     love.graphics.newImage("images/filecabinet.png"),
     love.graphics.newImage("images/highlight.png")
   }
+  self.mothership_image = love.graphics.newImage("images/mothership.png")
+  self.mothership_x = 0
+  self.mothership_y = 0
 
   self.map = {
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -78,12 +85,48 @@ function Level2:initialize_level()
     { 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
     { 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0}
   }
+
+  self.mothership_pause_limit = 2.0
+  self.mothership_pause_dt = 0.0
+  self.mothership_limit = 4.0
+  self.mothership_dt = 0.0
 end
 
 function Level2:update_environmental(dt)
+  self:update_mothership(dt)
   self:update_alien_beam(dt)
+end
+
+function Level2:update_mothership(dt)
+  if self.mothership_pause_dt < self.mothership_pause_limit then
+    self.mothership_pause_dt = self.mothership_pause_dt + dt
+  elseif self.mothership_dt < self.mothership_limit then
+    self.mothership_dt = self.mothership_dt + dt
+    self.mothership_y = -400 * self.mothership_dt / self.mothership_limit
+  end
 end
 
 function Level2:update_alien_beam(dt)
 end
 
+function Level2:draw()
+  if self:mothership_is_lifting_off() then
+    self:shake_screen(3)
+  end
+
+  Game.draw(self)
+end
+
+function Level2:level_draw()
+  if self.mothership_dt < self.mothership_limit then
+    love.graphics.draw(self.mothership_image, self.mothership_x, self.mothership_y - self.map_y)
+  end
+end
+
+function Level2:mothership_is_lifting_off()
+  return self.mothership_dt > 0 and self.mothership_dt < self.mothership_limit
+end
+
+function Level2:shake_screen(amplitude)
+  love.graphics.translate(math.random(amplitude*2)-amplitude, math.random(amplitude*2)-amplitude)
+end
