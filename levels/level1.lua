@@ -252,3 +252,19 @@ function Level1:lava_flow()
                          self.map[x[1]][x[2]] = 4
                        end)
 end
+
+function Level1:check_for_player_death()
+  if self:player_alive() and self:lava_colliding() then
+    self:die()
+  end
+end
+
+function Level1:check_for_player_death()
+  if self:player_alive() and self:lava_colliding() then
+    self:die()
+  end
+end
+
+function Level1:lava_colliding()
+  return self:is_touching_tile(function (tile) return tile == 4 end)
+end

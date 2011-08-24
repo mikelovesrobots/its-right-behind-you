@@ -352,10 +352,11 @@ function Game:map_max_y()
 end
 
 function Game:check_for_player_death()
-  if self:player_alive() and self:lava_colliding() then
-    self.death_dt = 0.01
-    self:stop_timer()
-  end
+end
+
+function Game:die()
+  self.death_dt = 0.01
+  self:stop_timer()
 end
 
 function Game:stop_timer()
@@ -364,10 +365,6 @@ end
 
 function Game:win_colliding()
   return self:is_touching_tile(function (tile) return tile == 5 end)
-end
-
-function Game:lava_colliding()
-  return self:is_touching_tile(function (tile) return tile == 4 end)
 end
 
 function Game:is_touching_tile(func)
