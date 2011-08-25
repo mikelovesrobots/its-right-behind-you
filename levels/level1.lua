@@ -214,7 +214,7 @@ function Level1:update_lava_flow(dt)
 end
 
 function Level1:lava_flow()
-  self.new_lava = {}
+  self.new_tiles = {}
   for y=1, #self.map do
     for x=1, #self.map[y] do
       if self.map[y][x] == 4 then
@@ -233,33 +233,27 @@ function Level1:lava_flow()
         end
 
         if tile_underneath and tile_underneath == 0 then
-          table.push(self.new_lava, {y+1,x})
+          table.push(self.new_tiles, {y+1,x})
         elseif tile_underneath and tile_underneath >= 1 and tile_underneath <= 3 then
           if tile_left == 0 then
-            table.push(self.new_lava, {y,x-1})
+            table.push(self.new_tiles, {y,x-1})
           end
 
           if tile_right == 0 then
-            table.push(self.new_lava, {y,x+1})
+            table.push(self.new_tiles, {y,x+1})
           end
         elseif tile_left and tile_left == 0 and math.random(1,round(1/app.config.LAVA_SPREAD_CHANCE)) == 1 then
-          table.push(self.new_lava, {y,x-1})
+          table.push(self.new_tiles, {y,x-1})
         elseif tile_right and tile_right == 0 and math.random(1,round(1/app.config.LAVA_SPREAD_CHANCE)) == 1 then
-          table.push(self.new_lava, {y,x+1})
+          table.push(self.new_tiles, {y,x+1})
         end
       end
     end
   end
 
-  table.each(self.new_lava, function(x)
+  table.each(self.new_tiles, function(x)
                          self.map[x[1]][x[2]] = 4
                        end)
-end
-
-function Level1:check_for_player_death()
-  if self:player_alive() and self:lava_colliding() then
-    self:die()
-  end
 end
 
 function Level1:check_for_player_death()

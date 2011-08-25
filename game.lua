@@ -8,7 +8,7 @@ function Game:enterState()
   self.y = 80
   self.current_gravity = 0
   self.start_time = love.timer.getMicroTime()
-  self.new_lava = {}
+  self.new_tiles = {}
   self.facing_right = true
 
   -- breaking bricks
@@ -51,7 +51,7 @@ function Game:update(dt)
       screen_manager:popState()
       screen_manager:pushState('DeadScreen')
     else
-      self:update_lava_flow(dt)
+      self:update_environmental(dt)
     end
     return
   end
@@ -157,8 +157,8 @@ function Game:draw_map()
       if x + first_tile_x == self.break_x and y + first_tile_y == self.break_y then
         love.graphics.setColor(self:break_color(), self:break_color(), self:break_color())
       else
-        if self:tile_is_new_lava(x + first_tile_x, y + first_tile_y) then
-          love.graphics.setColor(self:new_lava_color(), self:new_lava_color(), self:new_lava_color())
+        if self:tile_is_new_tile(x + first_tile_x, y + first_tile_y) then
+          love.graphics.setColor(self:new_tile_color(), self:new_tile_color(), self:new_tile_color())
         else
           love.graphics.setColor(255,255,255)
         end
@@ -392,11 +392,11 @@ function Game:key_down(key)
   return self:player_alive() and love.keyboard.isDown(key)
 end
 
-function Game:tile_is_new_lava(x,y)
-  return table.any(self.new_lava, function (pair) return pair[1] == y and pair[2] == x end)
+function Game:tile_is_new_tile(x,y)
+  return table.any(self.new_tiles, function (pair) return pair[1] == y and pair[2] == x end)
 end
 
-function Game:new_lava_color()
+function Game:new_tile_color()
   return 100 + 155 * self.lava_dt / app.config.LAVA_LIMIT
 end
 
