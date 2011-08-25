@@ -88,7 +88,7 @@ function Level2:initialize_level()
 
   self.mothership_pause_limit = 2.0
   self.mothership_pause_dt = 0.0
-  self.mothership_limit = 4.0
+  self.mothership_limit = 6.0
   self.mothership_dt = 0.0
 end
 
@@ -100,9 +100,12 @@ end
 function Level2:update_mothership(dt)
   if self.mothership_pause_dt < self.mothership_pause_limit then
     self.mothership_pause_dt = self.mothership_pause_dt + dt
+    self.mothership_y = -50 * self.mothership_pause_dt / self.mothership_pause_limit
+    self.mothership_x = 30 * self.mothership_pause_dt / self.mothership_pause_limit
   elseif self.mothership_dt < self.mothership_limit then
     self.mothership_dt = self.mothership_dt + dt
-    self.mothership_y = -400 * self.mothership_dt / self.mothership_limit
+    self.mothership_y = -50 + -400 * self.mothership_dt / self.mothership_limit
+    self.mothership_x = 30 + -30 * self.mothership_dt / self.mothership_limit
   end
 end
 
