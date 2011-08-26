@@ -13,6 +13,9 @@ function MainMenuScreen:enterState()
 end
 
 function MainMenuScreen:continuedState()
+  if self.music then
+    self.music:stop()
+  end
   self:reset_menu()
 end
 
