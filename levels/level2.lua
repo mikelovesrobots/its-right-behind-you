@@ -166,7 +166,7 @@ function Level2:new_tile_color()
 end
 
 
-function Level2:level_draw()
+function Level2:draw_level()
   if self.mothership_dt < self.mothership_limit then
     love.graphics.draw(self.mothership_image, self.mothership_x, self.mothership_y - self.map_y)
   end

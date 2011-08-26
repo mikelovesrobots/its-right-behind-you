@@ -11,6 +11,13 @@ function Game:enterState()
   self.new_tiles = {}
   self.facing_right = true
 
+  -- words that appear over his head
+  self.messages = {"There's no escape!", "FFFFFFFUUUUUUUUUUUU", "This is awful!", "Oh sweet Jesus!", "NO NO NO NO NO", "MOVE MOVE MOVE", "Not again!", "What did I do to deserve this?", "Please, please, I'll do anything to get out of this!"}
+  self.message = ""
+  self.message_dt = 0
+  self.message_limit = 8
+  self.message_display_limit = 2
+
   -- breaking bricks
   self.break_x = 0
   self.break_y = 0
@@ -37,11 +44,29 @@ end
 
 function Game:draw()
   self:draw_map()
-  love.graphics.draw(app.config.PLAYER_IMAGE, self:player_display_x(), self:player_display_y(), self:death_radians(), self:player_scale_x(), self:player_scale_y())
-  self:level_draw()
+  self:draw_player()
+  self:draw_level()
+  self:draw_message()
 end
 
-function Game:level_draw()
+function Game:draw_player()
+  love.graphics.draw(app.config.PLAYER_IMAGE, self:player_display_x(), self:player_display_y(), self:death_radians(), self:player_scale_x(), self:player_scale_y())
+end
+
+function Game:draw_message()
+  if self.message_dt < self.message_display_limit then
+    love.graphics.setColor(app.config.PLAYER_MESSAGE_COLOR, app.config.PLAYER_MESSAGE_COLOR, app.config.PLAYER_MESSAGE_COLOR)
+    love.graphics.printf(
+      self.message,
+      self.x - (app.config.PLAYER_MESSAGE_WIDTH / 2) + (app.config.TILE_WIDTH / 2),
+      self:player_display_y() - app.config.PLAYER_MESSAGE_DISTANCE_ABOVE_HEAD,
+      app.config.PLAYER_MESSAGE_WIDTH,
+      "center"
+    )
+  end
+end
+
+function Game:draw_level()
 end
 
 function Game:update(dt)
@@ -129,6 +154,7 @@ function Game:update(dt)
 
   self:update_environmental(dt)
   self:check_for_player_death()
+  self:update_message(dt)
 
   if self:win_colliding() then
     self:stop_timer()
@@ -138,6 +164,15 @@ function Game:update(dt)
 
   if love.keyboard.isDown("q") or love.keyboard.isDown("escape") then
     screen_manager:popState()
+  end
+end
+
+function Game:update_message(dt)
+  if self.message_dt < self.message_limit then
+    self.message_dt = self.message_dt + dt
+  else
+    self.message_dt = 0
+    self.message = table.random(self.messages)
   end
 end
 
