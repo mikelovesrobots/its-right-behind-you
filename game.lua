@@ -31,8 +31,8 @@ function Game:enterState()
   self:initialize_level()
 
   -- map variables
-  self.map_width = #self.map[1] -- Obtains the width of the first row of the map
-  self.map_height = #self.map -- Obtains the height of the map
+  self.map_width = 25 -- Used to be this: #self.map[1] -- Obtains the width of the first row of the map
+  self.map_height = math.floor(#self.map / 25)  -- #self.map -- Obtains the height of the map
   self.map_x = 0
   self.map_y = 0
   self.map_display_buffer = 2 -- We have to buffer one tile before and behind our viewpoint.
@@ -203,7 +203,7 @@ function Game:draw_map()
       if y + first_tile_y >= 1 and y + first_tile_y <= self.map_height
         and x + first_tile_x >= 1 and x + first_tile_x <= self.map_width
       then
-        local tile = self.tiles[self.map[y + first_tile_y][x + first_tile_x]]
+        local tile = self.tiles[self.map[(y + first_tile_y) * self.map_width + x + first_tile_x]]
         if tile then
           love.graphics.draw(
             tile,
@@ -224,7 +224,7 @@ function Game:tile_at_point(x,y)
 end
 
 function Game:tile_at_coord(coord)
-  return self.map[self:tile_y(coord.y)][self:tile_y(coord.x)]
+  return self.map[self.map_width * self:tile_y(coord.y) + self:tile_y(coord.x)]
 end
 
 function Game:tile_x(x)
@@ -312,7 +312,7 @@ function Game:bump_left(dt)
   local y = self:tile_y(self.y)
 
   if self:break_brick(x, y, dt) then
-    self.map[y][x] = 0
+    self.map[y * self.map_width + x] = 0
   end
 end
 
@@ -321,7 +321,7 @@ function Game:bump_right(dt)
   local y = self:tile_y(self.y)
 
   if self:break_brick(x, y, dt) then
-    self.map[y][x] = 0
+    self.map[y * self.map_width + x] = 0
   end
 end
 
@@ -330,7 +330,7 @@ function Game:bump_down(dt)
   local y = self:tile_y(self.y) + 1
 
   if self:break_brick(x, y, dt) then
-    self.map[y][x] = 0
+    self.map[y * self.map_width + x] = 0
   end
 end
 
@@ -379,7 +379,7 @@ function Game:inside_map_x(x)
 end
 
 function Game:map_max_x()
-  return #self.map[1] * app.config.TILE_WIDTH
+  return self.map_width * app.config.TILE_WIDTH
 end
 
 function Game:inside_map_y(y)
@@ -387,7 +387,7 @@ function Game:inside_map_y(y)
 end
 
 function Game:map_max_y()
-  return  #self.map * app.config.TILE_WIDTH
+  return  80 * app.config.TILE_WIDTH
 end
 
 function Game:check_for_player_death()
